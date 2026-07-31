@@ -13,10 +13,10 @@ Linux x86_64 预编译包。
 - 机型支持 DCU、NVIDIA
 - 自动识别测试框架 vLLM、SGLang
 - Server 启动检测与日志错误检测
-- Client 报告生成（已支持 OpenCompass、性能测试基础报告；其他类型持续补充）
+- Client 报告生成（已支持 OpenCompass、evalscope、bench性能基础报告；其他类型持续补充）
 - 异常清理（卡顿、常见错误、超时等）
 - 自动发送飞书消息（测试报告）
-- 多种模式：单测模式、标准测试模式、多模型模式（多个单机模型任务并发执行）
+- 多种模式：单测模式、标准测试模式、多模型任务模式（多个单机模型并发执行）
 - 多机多任务：支持多机模型、多任务串行模式
 - 批量脚本清洗并生成 yaml（`-sc`）；可选写入飞书表格
 
@@ -24,7 +24,7 @@ Linux x86_64 预编译包。
 
 ### 1. 下载
 
-到 [Releases](https://github.com/spflove/auto_run_docker/releases) 下载最新：
+到 (https://github.com/spflove/auto_run_docker/blob/main/run-docker-linux.tar.gz) 下载最新：
 
 - `run-docker-linux.tar.gz`
 
@@ -73,7 +73,7 @@ vim ~/.config/auto_docker/user_container.yaml
 
 直接运行 `run-docker`（无参数）可查看基本使用说明。
 
-## H20 公共账户集群
+## 公共账户集群
 
 公共账户集群下，各用户宜使用**自己目录里的 yaml**，不要共用别人的配置文件：
 
