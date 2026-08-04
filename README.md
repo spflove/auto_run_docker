@@ -303,13 +303,12 @@ ls -lt tmp_runtime/
 | 时间 | 要点 |
 |------|------|
 | 07-02 | 自定义映射 path1–5；`-fb` 群推送；`-link` 写飞书表；EvalScope 报告；`-sc` 洗脚本生成 yaml |
-| 07-09 | `--opencompass` 改为容器内路径；`-re` 复用他人容器；`-m --stop -as` 批量停子任务 |
-| 07-18 | 多目录 `-sc`；失败/乱码写入飞书表 |
-| 07-22 | SGLang / vLLM 多机；`-sc -nn` 生成多机 yaml |
+| 07-09 | `-re` 复用他人容器；`-m --stop -as` 批量停子任务 |
+| 07-22 | SGLang / vLLM 多机模型支持；`-sc -nn` 生成多机 yaml |
 | 07-27 | 动态 toponum / NUMA；`-fb N` 多群 |
 | 07-31 | `rm -da/-fo` 按日期删 exited 容器；`-m/-nm` 磁盘预检；`-sc` 映射/同模型提醒增强 |
 | 08-01 | `-sc` 支持多 Client 槽位与多组 `-nn`（按目录对齐；同目录同 IP 合并一份 nm yaml） |
-| 08-04 | `-m/-nm` 增加 `-fr/--forcerestart`（配合 `-st` 到点强制释放整节点 GPU）；`-nm` 选 IB `master_ip` 时降权管理/存储网卡；Server 日志增强检测 `hit an exception` / `AssertionError` |
+| 08-04 | `-m/-nm` 增加 `-fr/--forcerestart`（配合 `-st` 到点强制释放整节点 GPU）；`-nm` 选 IB `master_ip` 策略优化；增加Server 日志报错检测 `hit an exception` / `AssertionError` |
 
 ## 注意事项
 
