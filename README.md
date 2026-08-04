@@ -157,7 +157,7 @@ run-docker -nm xxx.yaml [可选参数...]
 run-docker my_container /path/to/server.sh /path/to/client.py 0
 run-docker -c my_container /path/to/server.sh
 run-docker -m xxx.yaml
-run-docker -nm xxx.yam
+run-docker -nm xxx.yaml
 ```
 
 ### 创建新容器
