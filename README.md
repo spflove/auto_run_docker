@@ -1,8 +1,8 @@
 # run-docker · 自动化测试工具
 
-最新更新：2026-07-31
+最新更新：2026-08-04
 
-Linux x86_64 预编译包。
+Linux x86_64 预编译包（版本可用 `run-docker --version` / `--versiondev` 查看）。
 
 ## 优点
 
@@ -140,7 +140,8 @@ run-docker -nm xxx.yaml [可选参数...]
 | 参数 | 说明 |
 |------|------|
 | `-id` / `--imageid` | 镜像 ID；**不传则复用（会重启容器）**；传入则创建新容器（重名自动加后缀） |
-| `-st` / `--scheduledtime` | 定时，如 `20260327_1035 或 2026-03-27_10:35` |
+| `-st` / `--scheduledtime` | 定时，如 `20260327_1035` 或 `2026-03-27_10:35` |
+| `-fr` / `--forcerestart` | **须配合 `-st`**（仅 `-m` / `-nm`）：到点后 `docker.orig restart` 强制释放整节点 GPU，再进入原有满卡等待 / 调度 |
 | `-opencs` / `--opencompass` | OpenCompass **容器内路径**（仅 `test_type=1`；标准 / 多模型） |
 | `-re` / `--reinstat` | 复用他人容器（标准 / 单测） |
 | `-df` / `--diagnosefeishu` | 任务前发一条飞书诊断消息 |
@@ -170,6 +171,15 @@ run-docker my_container /path/to/server.sh /path/to/client.py 0 -id abc123
 ```bash
 run-docker my_container /path/to/server.sh /path/to/client.py 0 -id abc123 -st 20260327_1035
 ```
+
+### 定时 + 到点强制释放 GPU（`-m` / `-nm`）
+
+```bash
+run-docker -m xxx.yaml -st 20260804_2200 -fr
+run-docker -nm xxx.yaml -st 20260804_2200 -fr
+```
+
+> `-fr` 必须配合有效 `-st`：倒计时结束后对各节点（`-m` 为本机）强制 `docker.orig restart`，尽量腾出整节点卡后再走原有等待 / 调度。
 
 ### OpenCompass 精度（容器内路径）
 
@@ -201,17 +211,23 @@ run-docker -c my_container /path/to/server.sh -re
 
 ```bash
 run-docker -sc <Server脚本目录...> \
-  -id <镜像ID> -bn <容器名前缀> -type <0|1> [-client <Client脚本>]
+  -id <镜像ID> -bn <容器名前缀> -type <0|1> [-client <Client脚本...>]
 
-# 多机：指定节点 IP
+# 多机：指定节点 IP（生成 nodemulti yaml）
 run-docker -sc <目录> -id <镜像ID> -bn <名称> -type 0 -client <路径> \
   -nn 10.16.1.28,10.16.1.25
 
-# 从 json 生成
+# 多目录 + 多 Client / 多组 -nn（空格分隔，按序与目录对齐；Client 不足则复用第一个）
+run-docker -sc <目录A> <目录B> -id <镜像ID> -bn <名称> -type 0 \
+  -client /path/client_a.py /path/client_b.py \
+  -nn 10.16.1.28,10.16.1.25 10.16.1.30,10.16.1.31
+
+# 从 json 生成（paths/client 可为数组）
 run-docker -sc -js <config.json>
 ```
 
-可选：`-ex 模型1,模型2` 排除；`-on/--only 模型1,模型2` 仅保留。  
+可选：`-ex 模型1,模型2` 排除；`-on/--only 模型1,模型2` 仅保留（可按目录重复指定）。  
+同目录且相同 IP 组合会合并为一份 nm yaml；单组 `-nn` 仍兼容。  
 生成的 yaml 在 Server 脚本目录内。
 
 ## 其他常用命令
@@ -292,11 +308,14 @@ ls -lt tmp_runtime/
 | 07-22 | SGLang / vLLM 多机；`-sc -nn` 生成多机 yaml |
 | 07-27 | 动态 toponum / NUMA；`-fb N` 多群 |
 | 07-31 | `rm -da/-fo` 按日期删 exited 容器；`-m/-nm` 磁盘预检；`-sc` 映射/同模型提醒增强 |
+| 08-01 | `-sc` 支持多 Client 槽位与多组 `-nn`（按目录对齐；同目录同 IP 合并一份 nm yaml） |
+| 08-04 | `-m/-nm` 增加 `-fr/--forcerestart`（配合 `-st` 到点强制释放整节点 GPU）；`-nm` 选 IB `master_ip` 时降权管理/存储网卡；Server 日志增强检测 `hit an exception` / `AssertionError` |
 
 ## 注意事项
 
 - 复用容器会**重启**该容器
 - `-c` / `-m` / `-nm` 须为第一个参数且互斥
+- `-fr` 仅用于 `-m` / `-nm`，且必须配合有效 `-st`
 - `test_type=1` 时 Client 须为 `.py`
 - 脚本需落在 `allowed_directories` 挂载树内
 - 写入飞书表格需给机器人**编辑权限**；仅支持表格类链接
