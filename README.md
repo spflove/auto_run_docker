@@ -1,6 +1,6 @@
 # run-docker · 自动化测试工具
 
-最新更新：2026-08-04
+最新更新：2026-08-06
 
 Linux x86_64 预编译包（版本可用 `run-docker --version` / `--versiondev` 查看）。
 
@@ -308,7 +308,8 @@ ls -lt tmp_runtime/
 | 07-27 | 动态 toponum / NUMA；`-fb N` 多群 |
 | 07-31 | `rm -da/-fo` 按日期删 exited 容器；`-m/-nm` 磁盘预检；`-sc` 映射/同模型提醒增强 |
 | 08-01 | `-sc` 支持多 Client 槽位与多组 `-nn`（按目录对齐；同目录同 IP 合并一份 nm yaml） |
-| 08-04 | `-m/-nm` 增加 `-fr/--forcerestart`（配合 `-st` 到点强制释放整节点 GPU）；`-nm` 选 IB `master_ip` 策略优化；增加Server 日志报错检测 `hit an exception` / `AssertionError` |
+| 08-04 | `-m/-nm` 增加 `-fr/--forcerestart`（配合 `-st` 到点强制释放整节点 GPU）；`-nm` 选 IB `master_ip` 策略优化；增加 Server 日志报错检测 `hit an exception` / `AssertionError` |
+| 08-05 | 安装时遇只读 shell rc（如公共目录锁死的 `~/.bash_profile`）改为告警并跳过，继续写入可写 rc；`--dcu` / 多机 hy-smi：优先 `/opt/hyhal/bin`，否则走 PATH；修复 worker 节点 SSH `bash -c` 未正确引号导致探测失败 |
 
 ## 注意事项
 
