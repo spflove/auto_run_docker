@@ -271,6 +271,40 @@ run-docker -pp --stats yx_deploy_logs/batch_pipeline_20261116_120000.log
 run-docker -pp -ss 20261116_120000
 ```
 
+#### job yaml 示例（`batch_pipeline_template.yaml`）
+
+下面是 **job yaml**（编排清单）。`targets[].yaml` 指向的才是 `-m`/`-nm`/`-ag` 队列任务 yaml（可由 `-sc` 生成），二者不是同一种文件。
+
+```yaml
+# 镜像来源：docker_images/*.tar.gz / build_*.log / 镜像 SHORT_ID
+b_log_or_s_imageid: /path/to/docker_images/my_build_20261116.tar.gz
+client_image_id: ""   # 可选；仅 -ag 使用；空=与 server 相同
+
+targets:
+  # 单机 -m（队列任务 yaml，如 more_*.yaml）
+  - ips: 10.16.1.37
+    yaml: /path/to/more_xxx_10.16.1.37_MMDD_HHMMSS.yaml
+  - ips: 10.16.1.38
+    yaml: /path/to/more_xxx_10.16.1.38_MMDD_HHMMSS.yaml
+
+  # 多机 -nm（队列任务 yaml，如 nm_*.yaml；ips 须与其 nodes 一致）
+  - ips: 10.16.1.28,10.16.1.25
+    yaml: /path/to/nm_xxx_10.16.1.28_MMDD_HHMMSS.yaml
+
+  # Agent 单机 / 多机（ag_*.yaml / ag_nm_*.yaml）
+  - ips: 10.16.1.40
+    yaml: /path/to/ag_xxx_10.16.1.40_MMDD_HHMMSS.yaml
+  - ips: 10.16.1.3,10.16.1.4
+    yaml: /path/to/ag_nm_xxx_10.16.1.3_MMDD_HHMMSS.yaml
+
+# 各节点执行 run-docker 的工作目录（通常为共享盘）
+run_cwd: /public/home/<你的账号>/yx_dockerspace
+
+# 按下标对应 targets；不足则复用第一项
+run_docker_args:
+  - "-fb -link eval"
+```
+
 要点：
 
 - job yaml 字段：`targets[{ips, yaml}]` + `b_log_or_s_imageid`（可为 `build_*.log` / `docker_images/*.tar.gz` / 镜像 SHORT_ID）；其中 `yaml` 指向各队列任务 yaml
