@@ -1,6 +1,6 @@
 # run-docker · 自动化测试工具
 
-最新更新：2026-11-16（dev `0.2.11.16.4`）
+最新更新：2026-11-17（dev `0.2.11.17.3`）
 
 Linux x86_64 预编译包（版本可用 `run-docker --version` / `--versiondev` 查看）。
 
@@ -517,6 +517,7 @@ ls -lt tmp_runtime/
 | 11-06 | 优化：`-m/-nm/-ag` 终态四档与进度飞书统计；vLLM master-port / DP address·rpc-port；磁盘预检红区阈；`-nm` work 脚本精简 |
 | 11-12 | 优化：`-link perf` 增加 `run_meta`；性能表 A 列「时间\|镜像\|节点」并写入清洗后 Server 脚本 |
 | 11-16 | 新增 `-pp/--pipeline` 多 target 编排、`-bi/--build-image` 镜像构建导出；`rm -ps -ssh` 多节点清理；`-pp` 内网免密任意节点发起 |
+| 11-17 | `-m/-nm/-ag` 队列收尾自动清理 work 下层 core dump；飞书 EvalScope 得分卡展示 timestamp/eval 路径，报告卡片格式优化 |
 
 ## 注意事项
 
